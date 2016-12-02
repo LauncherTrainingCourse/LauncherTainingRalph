@@ -3,10 +3,12 @@ package com.example.booker;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -18,26 +20,21 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.List;
-
-import static android.content.ContentValues.TAG;
 
 /**
  * Created by Ralph_Chao on 2016/11/30.
  */
 
-public class MyBook extends Fragment {
+public class MyBook extends Fragment{
     public static final String ARG_PAGE = "ARG_PAGE";
     private MyBookListAdapter listAdapter;
     ArrayList<BookContent> bookList = new ArrayList<>();
     ListView listView;
-    PageFragmentListener listener;
 
-    public static MyBook newInstance(int page, PageFragmentListener pageFragmentListener) {
+    public static MyBook newInstance(int page) {
         Bundle args = new Bundle();
         args.putInt(ARG_PAGE, page);
         MyBook myBook = new MyBook();
-        myBook.listener = pageFragmentListener;
         myBook.setArguments(args);
         return myBook;
     }
@@ -60,13 +57,10 @@ public class MyBook extends Fragment {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         Toast.makeText(getContext(), bookList.get(position).getTitle(), Toast.LENGTH_SHORT).show();
-                        //listener.onSwitchToNextFragment(position);
-                        /*FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                        FragmentTransaction transaction = getFragmentManager().beginTransaction();
                         transaction.replace(R.id.my_book, MyBookContent.newInstance(position));
+                        listView.setVisibility(View.INVISIBLE);
                         transaction.addToBackStack(null);
-                        transaction.commit();*/
-                        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
-                        transaction.add(R.id.content, MyBookContent.newInstance(position));
                         transaction.commit();
                     }
                 }
@@ -82,7 +76,6 @@ public class MyBook extends Fragment {
         }
         @Override
         public boolean onQueryTextSubmit(String query) {
-            Log.d(TAG, "submit:"+query);
             return false;
         }
     };
@@ -108,5 +101,6 @@ public class MyBook extends Fragment {
         bookList.add(new BookContent("DPP", "XXX", "KKK"));
         bookList.add(new BookContent("GKK", "JJJ", "PPP"));
     }
+
 
 }

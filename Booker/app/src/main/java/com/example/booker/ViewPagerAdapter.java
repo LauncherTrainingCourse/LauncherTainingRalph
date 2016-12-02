@@ -14,13 +14,9 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
     final int PAGE_CONT = 3;
     private String tabTitles [] = new String[] {"MyBook", "NewBook", "ContactInfo"};
     private Context context;
-    private MyBook  myBookFragment;
-    MyBookContent myBookContent;
-    private final FragmentManager fragmentManager;
 
     public ViewPagerAdapter(FragmentManager fm, Context context) {
         super(fm);
-        fragmentManager = fm;
         this.context = context;
     }
 
@@ -33,19 +29,7 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
     public Fragment getItem(final int position) {
         switch (position) {
             case 0:
-                if(myBookFragment == null) {
-                    myBookFragment = MyBook.newInstance(position, new PageFragmentListener() {
-                        @Override
-                        public void onSwitchToNextFragment(int item) {
-                            myBookContent = MyBookContent.newInstance(item);
-                            //fragmentManager.beginTransaction().remove(myBookFragment).commit();
-                            //fragmentManager.beginTransaction().add(myBookContent, "my_book_content");
-                            //fragmentManager.beginTransaction().replace(R.id.my_book, myBookContent).commit();
-                            notifyDataSetChanged();
-                        }
-                    });
-                }
-                return myBookFragment;
+                return MyBook.newInstance(position+1);
             default:
                 return DefaultFragment.newInstance(position+1);
         }
