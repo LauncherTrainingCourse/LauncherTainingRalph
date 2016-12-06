@@ -29,7 +29,6 @@ public class MyBookContent extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mItem = getArguments().getInt(ARG_ITEM);
-        //Toast.makeText(getContext(), "Content Create", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -37,7 +36,31 @@ public class MyBookContent extends Fragment {
         View view = inflater.inflate(R.layout.my_book_content, container, false);
         TextView textView = (TextView)view.findViewById(R.id.content_text);
         textView.setText("fragment"+mItem);
-        //Toast.makeText(getContext(), "Content Create", Toast.LENGTH_SHORT).show();
         return view;
     }
+/*
+    @Override
+    public void onPause() {
+        Toast.makeText(getContext(), "ContentPause", Toast.LENGTH_SHORT).show();
+        super.onPause();
+    }
+
+    @Override
+    public void onStop() {
+        Toast.makeText(getContext(), "ContentStop", Toast.LENGTH_SHORT).show();
+        super.onStop();
+    }
+
+    @Override
+    public void onDestroyView() {
+        Toast.makeText(getContext(), "ContentDestroy", Toast.LENGTH_SHORT).show();
+        super.onDestroyView();
+    }
+    @Override
+    public void onDetach() {
+        Toast.makeText(getContext(), "ContentDetach", Toast.LENGTH_SHORT).show();
+        super.onDetach();
+    }*/
+
+
 }
