@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.util.Log;
 import android.widget.Toast;
 
 /**
@@ -15,7 +16,7 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
     final int PAGE_CONT = 3;
     private String tabTitles [] = new String[] {"MyBook", "NewBook", "ContactInfo"};
     private Context context;
-    Fragment myBookFragment;
+
 
     public ViewPagerAdapter(FragmentManager fm, Context context) {
         super(fm);
@@ -31,6 +32,7 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(final int position) {
         switch (position) {
             case 0:
+                Log.d("getItem", "return MyBookRoot");
                 return MyBookRoot.newInstance();
             case 1:
                 return NewBookRoot.newInstance(position+1);

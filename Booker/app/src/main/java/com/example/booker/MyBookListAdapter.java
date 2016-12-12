@@ -60,10 +60,10 @@ public class MyBookListAdapter extends BaseAdapter implements Filterable{
         else {
             holder = (ViewHolder)convertView.getTag();
         }
-
         BookContent book = getItem(position);
         holder.textTitle.setText(book.getTitle());
         holder.textAuthor.setText(book.getAuthor());
+
 
         return convertView;
     }
@@ -72,7 +72,6 @@ public class MyBookListAdapter extends BaseAdapter implements Filterable{
     public android.widget.Filter getFilter() {
         if(filter == null)
             filter = new MyBookFilter();
-
         return filter;
     }
     private class MyBookFilter extends Filter {
@@ -88,7 +87,6 @@ public class MyBookListAdapter extends BaseAdapter implements Filterable{
 
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
-            //constraint = constraint.toString();
             FilterResults results = new FilterResults();
             if(originalValues == null) {
                 synchronized (this) {
