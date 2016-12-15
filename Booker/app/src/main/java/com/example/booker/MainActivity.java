@@ -16,14 +16,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
-
-    private BookerData db;
-
+    ViewPagerAdapter viewPagerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        db = new BookerData(this);
+        //this.deleteDatabase("BookerDB1.db");
 
         setContentView(R.layout.activity_main);
         Toolbar myToolbar = (Toolbar) findViewById(R.id.tool_bar);
@@ -34,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
         backTool.setDisplayHomeAsUpEnabled(true);
 
         ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);
-        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), MainActivity.this);
+        viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), MainActivity.this);
         viewPager.setAdapter(viewPagerAdapter);
         viewPager.setOffscreenPageLimit(3);
 
@@ -42,17 +40,14 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewPager);
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
-    @Override
-    public void onDestroy() {
-        db.close();
-        super.onDestroy();
+    public void updateList() {
+        viewPagerAdapter.notifyDataSetChanged();
     }
 
 }

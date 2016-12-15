@@ -1,12 +1,21 @@
 package com.example.booker;
 
+import android.content.res.Configuration;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.PagerAdapter;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -14,17 +23,20 @@ import android.widget.Toast;
  * Created by Ralph_Chao on 2016/12/1.
  */
 
+
 public class MyBookContent extends Fragment {
 
     public static final String ARG_ITEM = "ARG_ITEM";
     public static final String ARG_ID = "ARG_ID";
     public static final String ARG_SYNOPSIS = "ARG_SYNOPSIS";
-    private int mItem;
     private String synopsis;
+    private int bookID;
+    BookerData dbHelper;
+    SQLiteDatabase db;
+    BookContent bookContent;
 
-    public static MyBookContent newInstance(int item, BookContent bookContent) {
+    public static MyBookContent newInstance(BookContent bookContent) {
         Bundle args = new Bundle();
-        args.putInt(ARG_ITEM, item);
         args.putInt(ARG_ID, bookContent.getId());
         args.putString(ARG_SYNOPSIS, bookContent.getSynopsis());
         MyBookContent myBookContent = new MyBookContent();
@@ -34,50 +46,35 @@ public class MyBookContent extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        mItem = getArguments().getInt(ARG_ITEM);
         synopsis = getArguments().getString(ARG_SYNOPSIS);
-        Log.d("Create", "Content Create " + Integer.toString(mItem));
+        bookID = getArguments().getInt(ARG_ID);
         super.onCreate(savedInstanceState);
     }
 
-  @Override
+    @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
-       super.onSaveInstanceState(savedInstanceState);
-       savedInstanceState.putInt("CURRENT_POSITION", mItem);
-       Log.d("Set Instance", "Start save instance");
-       Log.d("Set Instance", "Set prePosition "+Integer.toString(mItem));
+        super.onSaveInstanceState(savedInstanceState);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.d("BookContentView", "ViewCreate");
         View view = inflater.inflate(R.layout.my_book_content, container, false);
-        TextView textView = (TextView)view.findViewById(R.id.content_text);
+        TextView textView = (TextView) view.findViewById(R.id.content_text);
         textView.setText(synopsis);
-        textView.setMovementMethod(new ScrollingMovementMethod());
+        Button button = (Button) view.findViewById(R.id.delete_my_book);
+        button.setText("從我的書架移除");
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dbHelper = new BookerData(getActivity());
+                db = dbHelper.getWritableDatabase();
+                db.delete("myBookTable", "_id=" + bookID, null);
+                Toast.makeText(getContext(), "已移除", Toast.LENGTH_SHORT).show();
+                db.close();
+                ((MainActivity) getActivity()).updateList();
+            }
+        });
         return view;
     }
-/*
-    @Override
-    public void onPause() {
-        Toast.makeText(getContext(), "ContentPause", Toast.LENGTH_SHORT).show();
-        super.onPause();
-    }
-
-    @Override
-    public void onStop() {
-        Toast.makeText(getContext(), "ContentStop", Toast.LENGTH_SHORT).show();
-        super.onStop();
-    }
-
-    @Override
-    public void onDestroyView() {
-        Toast.makeText(getContext(), "ContentDestroy", Toast.LENGTH_SHORT).show();
-        super.onDestroyView();
-    }
-    @Override
-    public void onDetach() {
-        Toast.makeText(getContext(), "ContentDetach", Toast.LENGTH_SHORT).show();
-        super.onDetach();
-    }*/
 }

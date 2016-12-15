@@ -5,21 +5,20 @@
     android:fillViewport="true">
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/my_book_content"
+        android:id="@+id/new_book_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/content_text"
+            android:id="@+id/new_content_text"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content" />
         <Button
-            android:id="@+id/delete_my_book"
+            android:id="@+id/add_to_my_book"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/content_text"
+            android:layout_below="@+id/new_content_text"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="88dp" />
-
     </RelativeLayout>
 </ScrollView>

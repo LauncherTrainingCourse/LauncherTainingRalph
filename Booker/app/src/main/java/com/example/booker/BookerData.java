@@ -16,17 +16,23 @@ public class BookerData extends SQLiteOpenHelper {
     public static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = "BookerDB.db";
     private String myBookTable = "myBookTable";
-    private String newBookTable = "vewBookTable";
+    private String newBookTable = "newBookTable";
     ArrayList<BookContent> myBookData = new ArrayList<>();
+    ArrayList<BookContent> newBookData = new ArrayList<>();
 
     public BookerData(Context context){
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
-
     @Override
     public void onCreate(SQLiteDatabase db){
         Log.d("DataBase", "Create");
         String SQL = "CREATE TABLE IF NOT EXISTS "+ myBookTable +" (_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "title VARCHAR(50), " +
+                "author VARCHAR(30), " +
+                "synopsis TEXT, " +
+                "image TEXT)";
+        db.execSQL(SQL);
+        SQL = "CREATE TABLE IF NOT EXISTS "+ newBookTable +" (_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "title VARCHAR(50), " +
                 "author VARCHAR(30), " +
                 "synopsis TEXT, " +
@@ -41,14 +47,8 @@ public class BookerData extends SQLiteOpenHelper {
         db.execSQL(SQL);
     }
 
-    public void deleteAll()
-    {
-        SQLiteDatabase db = this.getWritableDatabase();
-        db.execSQL("DROP TABLE IF EXISTS " + myBookTable );
-    }
-
     public void initialData(SQLiteDatabase db) {
-        insertData();
+        insertMyBookData();
         ContentValues values = new ContentValues();
         for(int i = 0; i < myBookData.size(); i++) {
             values.put("title", myBookData.get(i).getTitle());
@@ -56,9 +56,18 @@ public class BookerData extends SQLiteOpenHelper {
             values.put("synopsis", myBookData.get(i).getSynopsis());
             db.insert(myBookTable, null, values);
         }
+
+        insertNewBookData();
+        values = new ContentValues();
+        for(int i = 0; i < newBookData.size(); i++) {
+            values.put("title", newBookData.get(i).getTitle());
+            values.put("author", newBookData.get(i).getAuthor());
+            values.put("synopsis", newBookData.get(i).getSynopsis());
+            db.insert(newBookTable, null, values);
+        }
     }
 
-    public void insertData() {
+    public void insertMyBookData() {
         myBookData.add(new BookContent("哈利波特(1)：神秘的魔法石", "J.K羅琳", "在世界的另一個角落裡，有一個神秘的國度，裡面住滿了巫師，貓頭鷹是他們的信差，飛天掃帚是交通工具，西洋棋子會思考，幽靈頑皮鬼滿天飛，畫像裡的人還會跑出來串門子。\n" +
                 "\n" +
                 "　　　十一歲的哈利波特，從小被阿姨一家當成怪胎，經常得滿屋子躲避表哥達力的追打。他一直以為自己只是個平凡的小男孩，直到一封又一封神秘的信，將他帶入這個充滿神奇魔法的巫師世界，而他的身世之謎與魔法石的秘密也將同時解開。\n" +
@@ -111,5 +120,64 @@ public class BookerData extends SQLiteOpenHelper {
                 "　　阿不思的困擾也許只有天蠍能懂，天蠍有個惡名昭彰的父親──跩哥馬份，魔法學校甚至流傳著謠言：天蠍是佛地魔之子！於是，兩個男孩成為無話不談的好友，他們都無法選擇，無法選擇自己的父親，無法選擇去過一個自由自在的人生。\n" +
                 "\n" +
                 "　　然而，他們卻在無意間發現了一個秘密：魔法部還留有一個時光器。阿不思和天蠍第一次為自己做了選擇，他們要回到過去，改變這個不完美的世界。但他們不知道，就像人類不可能達到完美，魔法也一樣……"));
+    }
+
+    public void insertNewBookData() {
+        newBookData.add(new BookContent("資料挖礦與大數據分析", "簡禎富", "本書主要介紹資料挖礦與大數據分析的理論方法與應用，並加入豐富的實務案例介紹，具體說明如何應用資料挖礦與大數據分析技術以解決真實問題，深入淺出地剖析從數據中掏金的祕訣。全書共分為三篇十三章，內容涵蓋資料挖礦基本概念與資料準備、資料挖礦的方法與實證、資料挖礦的進階運用；書中也提供R程式語言與實作範例輔以說明，使讀者能容易應用資料挖礦方法，進而提升大數據分析和數位決策能力。"));
+        newBookData.add(new BookContent("Hadoop大數據處理", "劉軍", "本書以巨量資料處理系統的三大關鍵要素—「儲存」、「計算」與「容錯」為起點，深入淺出地介紹了如何使用Hadoop這一高性能分散式技術完成大數據處理任務。不僅包含了使用Hadoop進行大數據處理的實踐性知識和範例，還以圖文並茂的形式，有系統地介紹了Hadoop相關技術的運作原理和最佳化手段，為讀者進一步提升Hadoop使用技巧和執行效率提供了頗具價值的參考。\n" +
+                "\n" +
+                "　　本書共10章，涵蓋的主題包括大數據處理概論、基於Hadoop的大數據處理框架、MapReduce計算模式、使用HDFS儲存大數據、HBase、大數據的分析處理、Hadoop環境下的資料整合、Hadoop叢集的管理與維護、基於MapReduce的資料採擷實踐及大數據處理技術的未來。最後提供一個在Windows環境下建構Hadoop開發及測試環境的參考指引。"));
+        newBookData.add(new BookContent("哈佛教你精通大數據", "安德魯．麥克菲", "《哈佛教你精通大數據》集結全球頂尖的管理刊物《哈佛商業評論》的八篇重量級相關文章，強調「大數據」是「不是資訊長也該了解的新策略工具」！簡單來說，這是提供經理人一個如何全方位了解「大數據」，進而精準應用，使其成為企業與個人成長發展的利器。\n" +
+                "\n" +
+                "　　本書作者包括許多資訊科技與管理方面的大師級學者，以及深具實戰經驗的企管顧問、高階主管及科學家等。其中最知名的，當然就是有「知識管理大師」美譽的湯瑪斯．戴文波特（Thomas H. Davenport）！在本書中，這位重量級作者以深入淺出的方式，從理論面到實務面全方位透析你不可不知的「大數據」！\n" +
+                "\n" +
+                "　　《哈佛教你精通大數據》瞄準目前已成「顯學」的「大數據」（Big Data），精選《哈佛商業評論》2012到2013年的八篇重量級相關文章。其中，有「知識管理大師」美譽的湯瑪斯．戴文波特（Thomas H. Davenport），更是本文集的最重要作者，共收錄了三篇他在《哈佛商業評論》發表的大作，其中包括分析工具的進階、決策方式的發展，甚至還詳解「資料科學家」這個即將成為企業不可或缺的重要職缺，將為未來商業環境投入多麼巨大的變化！\n" +
+                "\n" +
+                "　　向來以洞燭趨勢，率先引領先驅觀念的《哈佛商業評論》，當然也沒有在「大數據」的浪潮中缺席，甚至在這股浪潮尚未蔚然成風之前，就以各種不同的角度，計有「整體定義」、「因應趨勢」、「管理能力」、「人才培育」、「基礎建置」、「品管把關」、「實務運用」，推出論述與實務兼具，充滿啟發性與實用性的內容。\n" +
+                "\n" +
+                "　　在快速運轉的商業環境中，《哈佛教你精通大數據》告訴你，你可以不是資料科學家獲資訊長，但一定要了解「大數據」，才能讓你的職涯，企業的發展同步upgrade。"));
+        newBookData.add(new BookContent("真實遊戲", "岱芬‧德薇岡", "溫柔、迷惑、模仿、控制，一步一步逼近......\n" +
+                "　　她，會是另一個史蒂芬．金筆下的「安妮」？！\n" +
+                "　　\n" +
+                "　　Ｌ就這樣進駐了我的生命，一步一步的蠱惑我。\n" +
+                "　　\n" +
+                "　　我經常在想，是哪裡出現了破綻，導致我如此脆弱、易於滲入。\n" +
+                "　　\n" +
+                "　　她是唯一知道這個秘密的人。只有她知道我寫不出東西，甚至連筆都拿不住。她不僅知道，還掩護我，成為我的分身。\n" +
+                "　　\n" +
+                "　　很明顯的，Ｌ完全控制了我，我不確定我是否曾極力表達不滿。我多希望能說，我曾奮力抵抗，努力地掙脫控制。但是，我無話可說。我把自己交給Ｌ，因為當時她讓我覺得她是唯一能夠幫我走出地洞的人。\n" +
+                "　　\n" +
+                "　　同時，一封一封匿名信威脅意味愈來愈濃厚......\n" +
+                "　　\n" +
+                "　　會是她策劃並主導了一切?!......"));
+        newBookData.add(new BookContent("解剖師的秘密", "喬迪‧尤布雷卡特", "　一場違背上帝旨意的禁忌永生探秘，\n" +
+                "　　正在十九世紀迷人的巴塞隆納幽暗地底進行。\n" +
+                "\n" +
+                "　　萬國博覽會開幕前24天，一連串的少女謀殺案件，\n" +
+                "　　屍首猶如被野獸啃咬，人們耳語是惡靈所為，\n" +
+                "　　卻不知已消失三百年的傳奇解剖書篇章，已重現人間……\n" +
+                "\n" +
+                "　　西元1888年，巴塞隆納即將舉辦萬國博覽會，卻在開幕之前，於會場附近的下水道出口，陸續發現了幾具殘缺不全的少女屍體，謀殺手法之恐怖，令人想起巴塞隆納城裡關於黑魔犬的古老詛咒……\n" +
+                "\n" +
+                "　　達尼是客居英國牛津的年輕教授，因接獲父親的死訊，而不得不返回有著傷心記憶的巴塞隆納奔喪，卻也因而捲入這場駭人聽聞的連續謀殺案。《巴塞隆納郵報》社會版新聞記者弗雷札堅信達尼的父親是遭人殺害，兩人循線找到了達尼父親藏在城市下水道的霍姆斯醫師筆記本，當中提到十六世紀傳奇解剖師維薩留斯的著作《論人體構造》，在七大書之外，另有一份神秘手稿......\n" +
+                "\n" +
+                "　　為了接近父親死亡的真相，他們邀請醫術精湛的謎樣醫學院學生帕瑦為被殺害的少女驗屍，於是三人開始抽絲剥繭，共同追索及試圖破解解剖師以極具巧思的手法所隱藏的第八書，卻也因此引來殺身之禍。\n" +
+                "\n" +
+                "　　究竟是什麼樣的秘密必須如此費心掩蓋，又與這駭人的少女謀殺案有著什麼樣的關聯？\n" +
+                "\n" +
+                "　　這部宛如史詩般的懸疑小說，結合了驚悚、犯罪、歷史、愛情等因素，小說中的場景至今仍存在於巴塞隆納，作者以廣泛的知識深度描寫了十九世紀當時，公開的解剖表演、降靈大會、咖啡館文化、羅馬人建立的下水道系統、活在地底的社會邊緣人、鬥牛場、為萬國博覽會所興建的發電廠，充斥華麗怪譚，劇情讓人血脈賁張，最後謎底揭曉更是震撼！"));
+        newBookData.add(new BookContent("搭下一班巴士離開", "勞倫斯．卜洛克", "人生不一定往前，有時候可能越活越回去，有時候可能原地打轉。縱使工作，伴侶，車子，房子，該有的一切都有了……\n" +
+                "\n" +
+                "　　比爾從巴士車窗望出去，兩棟建築之外，有家餐廳。餐廳窗戶上有個手寫的告示。他抓了手邊行李，匆忙下車。不到一個小時，他就得到一個二廚的工作，展開自己在蒙大拿這個名為越溪的城鎮的新生活。安穩地過了幾個禮拜之後，為打發工作之餘的空暇，他到圖書館申請了一張閱覽卡，也因此結識了圖書館員卡蓮妮。嶄新的人生一整個平順。餐廳老闆安迪和他一起研究新菜色，共同搭配甜點，甚至希望比爾能考慮承接這家餐廳。一個男人所需要的一切，似乎就在眼前。突然間，一覺醒來，令人欣羨的際遇消失無蹤，全世界應聲崩解……"));
+        newBookData.add(new BookContent("解憂雜貨店", "東野圭吾", "這裡不只賣日常生活用品，\n" +
+                "　　還提供消煩解憂的諮詢。\n" +
+                "　　困惑不安的你，糾結不已的你，\n" +
+                "　　歡迎來信討論心中的問題。\n" +
+                "\n" +
+                "　　靜僻的街道旁，佇立著一家「解憂雜貨店」。只要在晚上把寫了煩惱的信丟進鐵捲門上的投遞口，隔天就可以在店後面的牛奶箱裡拿到回信解答。\n" +
+                "\n" +
+                "　　男友罹患不治之症，陷入愛情與夢想兩難的女孩；一心想成為音樂人，不惜離家又休學，卻面臨理想與現實掙扎的魚店老闆兒子；爸爸的公司倒閉，打算帶著全家捲款潛逃，在親情與未來之間游移不定的少年……\n" +
+                "\n" +
+                "　　當他們紛紛寫信到雜貨店，不可思議的事情也接二連三發生。而那些一瞬間的交會，又將如何演變成一生一世的救贖？跨越三十年時空，雜貨店恆常散放著溫暖奇異的光芒……"));
     }
 }

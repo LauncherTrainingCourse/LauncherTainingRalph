@@ -1,16 +1,13 @@
 package com.example.booker;
 
-import android.content.res.Configuration;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.SearchView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -22,19 +19,19 @@ import android.widget.ListView;
 import java.util.ArrayList;
 
 /**
- * Created by Ralph_Chao on 2016/11/30.
+ * Created by Ralph_Chao on 2016/12/14.
  */
 
-public class MyBook extends Fragment {
+public class MyBookLarge extends Fragment {
     private MyBookListAdapter listAdapter;
     ArrayList<BookContent> bookList = new ArrayList<>();
     ListView listView;
     BookerData dbHelper;
     SQLiteDatabase db;
 
-    public static MyBook newInstance() {
-        MyBook myBook = new MyBook();
-        return myBook;
+    public static MyBookLarge newInstance() {
+        MyBookLarge myBookLarge = new MyBookLarge();
+        return myBookLarge;
     }
 
     @Override
@@ -57,9 +54,8 @@ public class MyBook extends Fragment {
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         FragmentTransaction transaction;
                         transaction = getFragmentManager().beginTransaction();
-                        transaction.replace(R.id.my_book_root, MyBookContent.newInstance(bookList.get(position)));
+                        transaction.replace(R.id.my_content_container_large, MyBookContent.newInstance(bookList.get(position)));
                         transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-                        transaction.addToBackStack("bookList");
                         transaction.commit();
                     }
                 }
@@ -70,7 +66,7 @@ public class MyBook extends Fragment {
     final private SearchView.OnQueryTextListener queryListener = new SearchView.OnQueryTextListener() {
         @Override
         public boolean onQueryTextChange(String newText) {
-            MyBook.this.listAdapter.getFilter().filter(newText);
+            MyBookLarge.this.listAdapter.getFilter().filter(newText);
             return false;
         }
 
@@ -99,4 +95,5 @@ public class MyBook extends Fragment {
         }
         db.close();
     }
+
 }
